@@ -3,6 +3,7 @@
 # Python Slots developed by chaNcharge
 
 from random import randint
+from time import sleep
 
 
 def autospin():
@@ -29,14 +30,15 @@ def autospin():
 
 
 def manualspin():
+    print("Press enter to spin...")
     while True:
         times_spun = 0
-        spin = input("Press enter to spin...")
+        spin = input()
         times_spun += 1
         slot1 = randint(1, 13)
         slot2 = randint(1, 13)
         slot3 = randint(1, 13)
-        print(slot1, slot2, slot3)
+        print(slot1, slot2, slot3, end="\r")
         if slot1 == slot2 == slot3:
             print("You win!!!", "Spins until win: %s" % times_spun)
             if slot1 and slot2 and slot3 == 13:
@@ -48,16 +50,18 @@ def manualspin():
 
 def coinslot():
     coins = 30
+    print("Press enter to spin...")
     while coins > 0:
-        print("Coins left: %s" % coins)
-        spin = input("Press enter to spin...")
+        spin = input("\nCoins left: %s" % coins)
         coins -= 1
-        slot1 = randint(1, 7)
-        slot2 = randint(1, 7)
-        slot3 = randint(1, 7)
-        print(slot1, slot2, slot3)
+        for i in range(30):
+            sleep(0.05)
+            slot1 = randint(1, 7)
+            slot2 = randint(1, 7)
+            slot3 = randint(1, 7)
+            print(slot1, slot2, slot3, end = "\r")
         if slot1 == slot2 == slot3:
-            print("You win!!!")
+            print("\nYou win!!!")
             if slot1 and slot2 and slot3 == 1:
                 coins += 10
             elif slot1 and slot2 and slot3 == 2:
@@ -74,7 +78,7 @@ def coinslot():
                 coins += 100
                 print("Jackpot!!!")
     else:
-        print("Out of coins :(")
+        print("\nOut of coins :(")
 
 
 # Init
