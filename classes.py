@@ -9,8 +9,7 @@ class Pet(object):
         self.asleep = asleep
 
     def description(self):
-        print self.name
-        print self.age
+        print self.name, self.age
 
 
 cat = Pet("Cole", 4, False)
@@ -22,5 +21,5 @@ print cat.name, cat.age, cat.asleep
 print cat2.name, cat2.age, cat2.asleep, cat2.is_alive
 print dog.name, dog.asleep
 print bird.name, bird.age
-print dog.description()
+dog.description()
 print 4 << 3
