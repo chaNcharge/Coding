@@ -24,9 +24,6 @@ def main():
     x = np.linspace(0, 10, 5000)
     plt.plot(x, special.jv(args.order, x), '-', sol.x, -sol.fun, 'o')
 
-    # Produce output
-    plt.savefig(args.output, dpi=96)
-
 if __name__ == "__main__":
     main()
     plt.show()
