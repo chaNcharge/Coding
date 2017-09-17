@@ -1,12 +1,12 @@
 import youtube_dl
 from time import sleep
 
-ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s'})
+ydl = youtube_dl.YoutubeDL({'outtmpl': '%(title)s.%(ext)s'})
 
 with ydl:
     result = ydl.extract_info(
         'https://www.youtube.com/watch?v=WLIfbiTUMiU',
-        download=False # We just want to extract the info
+        download=True # We just want to extract the info
     )
 
 if 'entries' in result:
@@ -17,4 +17,7 @@ else:
     video = result
 
 sleep(3)
-print(video)
+metadata = False
+
+if metadata == True:
+    print(video)
