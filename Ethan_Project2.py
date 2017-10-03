@@ -2,7 +2,7 @@ from turtle import *
 screen = Screen()
 
 shape("triangle")
-shape = raw_input("What would you like to do? Choices: colorcircle, staircase, grid, octagon ")
+shape = raw_input("What would you like to do? (Choices: colorcircle, staircase, grid, octagon) ")
 colorchoice = raw_input("What color? Color must be typed in all lowercase, and must be in the color range for the turtle. ")
 
 color(colorchoice)
