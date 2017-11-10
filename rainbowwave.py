@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import turtle
 from math import sin
 def hueGen(hue = 0,val = 1, sat=1):

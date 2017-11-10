@@ -53,5 +53,5 @@ def get_class_average(students):
 graded_student = alice
 
 print "Grade: " + get_letter_grade(get_average(graded_student)), get_average(graded_student)
-print
+print ""
 print "Class Average: " + get_letter_grade(get_class_average(students)), get_class_average(students)
