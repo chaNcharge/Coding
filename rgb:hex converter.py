@@ -10,5 +10,13 @@ def rgb_to_hex(red, green, blue):
 	"""Return color as #rrggbb for the given color values."""
 	return '#%02x%02x%02x' % (red, green, blue)
 
-print(hex_to_rgb("10494f"))
-print(rgb_to_hex(50, 197, 210))
+choice = input("Convert from rgb or hex? ")
+
+if choice == "rgb":
+    r = int(input("Red: "))
+    g = int(input("Green: "))
+    b = int(input("Blue: "))
+    print(rgb_to_hex(r, g, b))
+elif choice == "hex":
+    hex = input("Hex: #")
+    print(hex_to_rgb(hex))
