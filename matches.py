@@ -31,4 +31,5 @@ def run(maxnum):
             return counter
 
 if __name__ == "__main__":
+    get_time()
     run(10000000)
