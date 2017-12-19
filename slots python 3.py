@@ -12,7 +12,7 @@ def autospin():
         spins = int(input("How many times would you like to spin? "))
     except:
         raise ValueError("Invalid number entered, please rerun.")
-    for i in range(spins):
+    for _ in range(spins):
         times_spun += 1
         slot1 = randint(1, 13)
         slot2 = randint(1, 13)
@@ -31,8 +31,8 @@ def autospin():
 
 def manualspin():
     print("Press enter to spin...")
+    times_spun = 0
     while True:
-        times_spun = 0
         spin = input()
         times_spun += 1
         slot1 = randint(1, 13)
@@ -54,7 +54,7 @@ def coinslot():
     while coins > 0:
         spin = input("\nCoins left: %s" % coins)
         coins -= 1
-        for i in range(30):
+        for _ in range(30):
             sleep(0.05)
             slot1 = randint(1, 7)
             slot2 = randint(1, 7)
