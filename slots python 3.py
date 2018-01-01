@@ -33,7 +33,7 @@ def manualspin():
     print("Press enter to spin...")
     times_spun = 0
     while True:
-        spin = input()
+        input()
         times_spun += 1
         slot1 = randint(1, 13)
         slot2 = randint(1, 13)
@@ -52,7 +52,7 @@ def coinslot():
     coins = 30
     print("Press enter to spin...")
     while coins > 0:
-        spin = input("\nCoins left: %s" % coins)
+        input("\nCoins left: %s" % coins)
         coins -= 1
         for _ in range(30):
             sleep(0.05)
