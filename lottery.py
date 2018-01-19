@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 ''' 
-A lottery that chooses 5 random numbers from 0 - 9.
+A lottery that chooses 5 random numbers from 1 - 9.
 5 numbers are user inputs.
 If they all match, the user wins.
 '''
 
 from random import sample
 
-lotterynumbers = sample(range(10), 5)
+lotterynumbers = sample(range(1, 10), 5)
 
 my_numbers = []
 numsinlist = 0
