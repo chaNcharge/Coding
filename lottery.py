@@ -14,9 +14,11 @@ numsinlist = 0
 
 # Checks if there are less than 5 numbers in the list. Does not add duplicates.
 while numsinlist < 5:
-    numinput = int(input("Enter 1 number 0 - 9, then press return: "))
+    numinput = int(input("Enter 1 number 1 - 9, then press return: "))
     if numinput in my_numbers:
         print("That number is already in the ticket.")
+    elif numinput < 1 or numinput > 9:
+        print("That number is out of range of the lottery numbers.")
     else:
         my_numbers.append(numinput)
         numsinlist += 1
