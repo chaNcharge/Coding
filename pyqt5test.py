@@ -1,7 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
 
 
 class App(QMainWindow):
@@ -23,6 +21,13 @@ class App(QMainWindow):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.statusBar().showMessage("Running!")
+
+        buttonReply = QMessageBox.question(self, 'Question 1', 'Is my processor fat?')
+        if buttonReply == QMessageBox.Yes:
+            print("They hate me >:(")
+        elif buttonReply == QMessageBox.No:
+            print("Good, I'm not slacking.")
+
         self.show()
 
     def onClick(self):
