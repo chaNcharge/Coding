@@ -13,10 +13,13 @@ class Employee:
         return self.first + " " + self.last + " " + "Hourly Pay: " + str(self.pay)
     def daily_pay(self):
         ''' Calculate daily pay, assuming 8 work hours '''
-        return self.pay * 8
-    def salary(self):
+        return round(self.pay * 8, 2)
+    def monthly(self):
         ''' Calculate monthly wage, assuming it's a 30 day month '''
-        return self.daily_pay() * 30
+        return round(self.daily_pay() * 30, 2)
+    def salary(self):
+        ''' Calculate yearly salary from monthly '''
+        return round(self.monthly() * 12, 2)
 
 emp1 = Employee("Ethan", "Cha", 9.75)
 emp2 = Employee("Corey", "Schafer", 10.95)
