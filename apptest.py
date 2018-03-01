@@ -229,7 +229,6 @@ class MainWindow(QMainWindow):
                         print('added file ',fInfo.fileName())
                         self.currentPlaylist.addMedia(QMediaContent(QUrl.fromLocalFile(it.filePath())))
                 it.next()
-                self.qmp_positionChanged(0)
             
     def songInfo(self):
         infoAc = QAction('Info',self)

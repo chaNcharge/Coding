@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, QDirIterator
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QFileDialog, QMenuBar, QAction
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaPlayer, QMediaContent
 
@@ -22,6 +22,7 @@ class App(QWidget):
         # Add file menu
         filemenu = self.menubar.addMenu('File')
         filemenu.addAction(self.fileOpen())
+        filemenu.addAction(self.folderOpen())
 
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -36,7 +37,7 @@ class App(QWidget):
 
     def openFile(self):
         print("File button clicked!")
-        song = QFileDialog.getOpenFileName(self, "Open Song", "~/", "Sound Files (*.mp3)")
+        song = QFileDialog.getOpenFileName(self, "Open Song", "~", "Sound Files (*.mp3)")
         print(song[0])
         
         url = QUrl.fromLocalFile(song[0])
@@ -47,6 +48,30 @@ class App(QWidget):
         self.player.playlist().setCurrentIndex(0)
         self.player.play()
 
+    def folderOpen(self):
+        folderAc = QAction('Open Folder', self)
+        folderAc.setShortcut('Ctrl+D')
+        folderAc.setStatusTip('Open Folder (Will add all the files in the folder) ')
+        folderAc.triggered.connect(self.addFiles)
+        return folderAc
+    
+    def addFiles(self):
+        folderChosen = QFileDialog.getExistingDirectory(self,'Open Music Folder', '~')
+        if folderChosen != None:
+            it = QDirIterator(folderChosen)
+            it.next()
+            while it.hasNext():
+                if it.fileInfo().isDir() == False and it.filePath() != '.':
+                    fInfo = it.fileInfo()
+                    print(it.filePath(),fInfo.suffix())
+                    if fInfo.suffix() in ('mp3','ogg','wav','m4a'):
+                        print('added file', fInfo.fileName())
+                        self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(it.filePath())))
+                it.next()
+            self.player.setPlaylist(self.playlist)
+            self.player.playlist().setCurrentIndex(0)
+            self.player.play()
+    
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
