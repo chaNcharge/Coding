@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import QUrl, QDirIterator
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QFileDialog, QMenuBar, QAction, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QFileDialog, QMenuBar, QAction, QHBoxLayout, QVBoxLayout, QMainWindow
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaPlayer, QMediaContent
 
 
@@ -16,6 +16,7 @@ class App(QWidget):
         self.top = 300
         self.width = 300
         self.height = 150
+        self.userAction = -1  # 0- stopped, 1- playing 2-paused
         self.initUI()
 
     def initUI(self):
@@ -57,6 +58,15 @@ class App(QWidget):
         controlArea.addLayout(controls)
         controlArea.addLayout(playlistCtrlLayout)
         self.setLayout(controlArea)
+        # Connect each button to their appriate function
+        volumeDescBtn.clicked.connect(self.decreaseVolume)
+        playBtn.clicked.connect(self.playhandler)
+        pauseBtn.clicked.connect(self.pausehandler)
+        stopBtn.clicked.connect(self.stophandler)
+        volumeIncBtn.clicked.connect(self.increaseVolume)
+
+        prevBtn.clicked.connect(self.prevSong)
+        nextBtn.clicked.connect(self.nextSong)
 
     def fileOpen(self):
         fileAc = QAction('Open File', self)
@@ -78,6 +88,7 @@ class App(QWidget):
         self.player.setPlaylist(self.playlist)
         self.player.playlist().setCurrentIndex(0)
         self.player.play()
+        self.userAction = 1
 
     def folderOpen(self):
         folderAc = QAction('Open Folder', self)
@@ -105,6 +116,50 @@ class App(QWidget):
             self.player.setPlaylist(self.playlist)
             self.player.playlist().setCurrentIndex(0)
             self.player.play()
+            self.userAction = 1
+    
+    def playhandler(self):
+        self.userAction = 1
+        if self.player.state() == QMediaPlayer.StoppedState :
+            if self.player.mediaStatus() == QMediaPlayer.NoMedia:
+                print(self.currentPlaylist.mediaCount())
+                if self.currentPlaylist.mediaCount() == 0:
+                    self.openFile()
+                if self.currentPlaylist.mediaCount() != 0:
+                    self.player.setPlaylist(self.currentPlaylist)
+            elif self.player.mediaStatus() == QMediaPlayer.LoadedMedia:
+                self.player.play()
+            elif self.player.mediaStatus() == QMediaPlayer.BufferedMedia:
+                self.player.play()
+        elif self.player.state() == QMediaPlayer.PausedState:
+            self.player.play()
+
+    def pausehandler(self):
+        self.userAction = 2
+        self.player.pause()
+
+    def stophandler(self):
+        self.userAction = 0
+        if self.player.state() == QMediaPlayer.PlayingState:
+            self.player.stop()
+        elif self.player.state() == QMediaPlayer.PausedState:
+            self.player.stop()
+        
+    def increaseVolume(self):
+        vol = self.player.volume()
+        vol = min(vol+5,100)
+        self.player.setVolume(vol)
+        
+    def decreaseVolume(self):
+        vol = self.player.volume()
+        vol = max(vol-5,0)
+        self.player.setVolume(vol)
+
+    def prevSong(self):
+        self.player.playlist().previous()
+
+    def nextSong(self):
+        self.player.playlist().next()
 
 
 if __name__ == '__main__':
