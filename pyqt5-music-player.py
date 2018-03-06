@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import QUrl, QDirIterator
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QFileDialog, QMenuBar, QAction, QHBoxLayout, QVBoxLayout, QMainWindow
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QFileDialog, QMenuBar, QAction, QHBoxLayout, QVBoxLayout
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaPlayer, QMediaContent
 
 
