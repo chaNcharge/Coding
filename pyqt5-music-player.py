@@ -40,6 +40,7 @@ class App(QWidget):
         volumeIncBtn = QPushButton('V (+)')  # Increase Volume
         # Add playlist controls
         prevBtn = QPushButton('Prev Song')
+        shuffleBtn = QPushButton('Shuffle')
         nextBtn = QPushButton('Next Song')
         # Add button layouts
         controlArea = QVBoxLayout()  # centralWidget
@@ -53,6 +54,7 @@ class App(QWidget):
         controls.addWidget(volumeIncBtn)
         # Add buttons to playlist controls layout
         playlistCtrlLayout.addWidget(prevBtn)
+        playlistCtrlLayout.addWidget(shuffleBtn)
         playlistCtrlLayout.addWidget(nextBtn)
         # Add to vertical layout
         controlArea.addLayout(controls)
@@ -66,6 +68,7 @@ class App(QWidget):
         volumeIncBtn.clicked.connect(self.increaseVolume)
 
         prevBtn.clicked.connect(self.prevSong)
+        shuffleBtn.clicked.connect(self.shufflelist)
         nextBtn.clicked.connect(self.nextSong)
 
     def fileOpen(self):
@@ -159,6 +162,10 @@ class App(QWidget):
             self.openFile()
         elif self.playlist.mediaCount() != 0:
             self.player.playlist().previous()
+    
+    def shufflelist(self):
+        self.playlist.shuffle()
+        print("Shuffled playlist!")
 
     def nextSong(self):
         if self.playlist.mediaCount() == 0:
