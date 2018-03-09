@@ -87,10 +87,9 @@ class App(QWidget):
         self.playlist.addMedia(QMediaContent(url))
         print(self.playlist.mediaCount())
 
-        if self.userAction != 1:
-            self.player.setPlaylist(self.playlist)
-            self.player.play()
-            self.userAction = 1
+        self.player.setPlaylist(self.playlist)
+        self.player.play()
+        self.userAction = 1
 
     def folderOpen(self):
         folderAc = QAction('Open Folder', self)
@@ -101,6 +100,18 @@ class App(QWidget):
 
     def addFiles(self):
         print("Folder button clicked!")
+        if self.playlist.mediaCount() != 0:
+            self.folderIterator()
+            print(self.playlist.mediaCount())
+        else:
+            self.folderIterator()
+            self.player.setPlaylist(self.playlist)
+            self.player.playlist().setCurrentIndex(0)
+            self.player.play()
+            print(self.playlist.mediaCount())
+            self.userAction = 1
+    
+    def folderIterator(self):
         folderChosen = QFileDialog.getExistingDirectory(self, 'Open Music Folder', '~')
         if folderChosen != None:
             it = QDirIterator(folderChosen)
@@ -113,11 +124,12 @@ class App(QWidget):
                         print('added file', fInfo.fileName())
                         self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(it.filePath())))
                 it.next()
-            self.player.setPlaylist(self.playlist)
-            self.player.playlist().setCurrentIndex(0)
-            self.player.play()
-            print(self.playlist.mediaCount())
-            self.userAction = 1
+            if it.fileInfo().isDir() == False and it.filePath() != '.':
+                fInfo = it.fileInfo()
+                print(it.filePath(), fInfo.suffix())
+                if fInfo.suffix() in ('mp3', 'ogg', 'wav', 'm4a'):
+                    print('added file', fInfo.fileName())
+                    self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(it.filePath())))
     
     def playhandler(self):
         self.userAction = 1
@@ -142,10 +154,9 @@ class App(QWidget):
 
     def stophandler(self):
         self.userAction = 0
-        if self.player.state() == QMediaPlayer.PlayingState:
-            self.player.stop()
-        elif self.player.state() == QMediaPlayer.PausedState:
-            self.player.stop()
+        self.player.stop()
+        self.playlist.clear()
+        print("Playlist cleared!")
         
     def increaseVolume(self):
         vol = self.player.volume()
