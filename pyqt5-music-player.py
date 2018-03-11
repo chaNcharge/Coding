@@ -94,12 +94,15 @@ class App(QMainWindow):
 
         if song[0] != '':
             url = QUrl.fromLocalFile(song[0])
-            self.playlist.addMedia(QMediaContent(url))
-            print(self.playlist.mediaCount())
-
-        self.player.setPlaylist(self.playlist)
-        self.player.play()
-        self.userAction = 1
+            if self.playlist.mediaCount() == 0:
+                self.playlist.addMedia(QMediaContent(url))
+                self.player.setPlaylist(self.playlist)
+                self.player.play()
+                self.userAction = 1
+                print(self.playlist.mediaCount())
+            else:
+                self.playlist.addMedia(QMediaContent(url))
+                print(self.playlist.mediaCount())
 
     def addFiles(self):
         print("Folder button clicked!")
