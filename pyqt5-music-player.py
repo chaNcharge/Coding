@@ -1,10 +1,10 @@
 import sys
 from PyQt5.QtCore import QUrl, QDirIterator
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QFileDialog, QMenuBar, QAction, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog, QMenuBar, QAction, QHBoxLayout, QVBoxLayout
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaPlayer, QMediaContent
 
 
-class App(QWidget):
+class App(QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -32,6 +32,8 @@ class App(QWidget):
         self.show()
 
     def addControls(self):
+        wid = QWidget(self)
+        self.setCentralWidget(wid)
         # Add song controls
         playBtn = QPushButton('Play')  # play button
         pauseBtn = QPushButton('Pause')  # pause button
@@ -59,7 +61,7 @@ class App(QWidget):
         # Add to vertical layout
         controlArea.addLayout(controls)
         controlArea.addLayout(playlistCtrlLayout)
-        self.setLayout(controlArea)
+        wid.setLayout(controlArea)
         # Connect each button to their appriate function
         volumeDescBtn.clicked.connect(self.decreaseVolume)
         playBtn.clicked.connect(self.playhandler)
