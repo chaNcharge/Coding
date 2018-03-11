@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtCore import QUrl, QDirIterator
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog, QMenuBar, QAction, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog, QAction, QHBoxLayout, QVBoxLayout
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaPlayer, QMediaContent
 
 
@@ -10,7 +10,6 @@ class App(QMainWindow):
         super().__init__()
         self.player = QMediaPlayer()
         self.playlist = QMediaPlaylist()
-        self.menubar = QMenuBar()
         self.title = 'PyQt5 music player'
         self.left = 300
         self.top = 300
@@ -21,11 +20,26 @@ class App(QMainWindow):
 
     def initUI(self):
         # Add file menu
-        filemenu = self.menubar.addMenu('File')
-        filemenu.addAction(self.fileOpen())
-        filemenu.addAction(self.folderOpen())
+        menubar = self.menuBar()
+        filemenu = menubar.addMenu('File')
+
+        fileAct = QAction('Open File', self)
+        folderAct = QAction('Open Folder', self)
+
+        fileAct.setShortcut('Ctrl+O')
+        fileAct.setStatusTip('Open File')
+
+        folderAct.setShortcut('Ctrl+D')
+        folderAct.setStatusTip('Open Folder (Will add all the files in the folder) ')
+
+        filemenu.addAction(fileAct)
+        filemenu.addAction(folderAct)
+
+        fileAct.triggered.connect(self.openFile)
+        folderAct.triggered.connect(self.addFiles)
 
         self.addControls()
+        self.statusBar()
 
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -73,32 +87,19 @@ class App(QMainWindow):
         shuffleBtn.clicked.connect(self.shufflelist)
         nextBtn.clicked.connect(self.nextSong)
 
-    def fileOpen(self):
-        fileAc = QAction('Open File', self)
-        fileAc.setShortcut('Ctrl+O')
-        fileAc.setStatusTip('Open File')
-        fileAc.triggered.connect(self.openFile)
-        return fileAc
-
     def openFile(self):
         print("File button clicked!")
-        song = QFileDialog.getOpenFileName(self, "Open Song", "~", "Sound Files (*.mp3)")
+        song = QFileDialog.getOpenFileName(self, "Open Song", "~", "Sound Files (*.mp3 *.ogg *.wav *.m4a)")
         print(song[0])
 
-        url = QUrl.fromLocalFile(song[0])
-        self.playlist.addMedia(QMediaContent(url))
-        print(self.playlist.mediaCount())
+        if song[0] != '':
+            url = QUrl.fromLocalFile(song[0])
+            self.playlist.addMedia(QMediaContent(url))
+            print(self.playlist.mediaCount())
 
         self.player.setPlaylist(self.playlist)
         self.player.play()
         self.userAction = 1
-
-    def folderOpen(self):
-        folderAc = QAction('Open Folder', self)
-        folderAc.setShortcut('Ctrl+D')
-        folderAc.setStatusTip('Open Folder (Will add all the files in the folder) ')
-        folderAc.triggered.connect(self.addFiles)
-        return folderAc
 
     def addFiles(self):
         print("Folder button clicked!")
@@ -134,21 +135,12 @@ class App(QMainWindow):
                     self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(it.filePath())))
     
     def playhandler(self):
-        self.userAction = 1
-        if self.player.state() == QMediaPlayer.StoppedState :
-            if self.player.mediaStatus() == QMediaPlayer.NoMedia:
-                print(self.playlist.mediaCount())
-                if self.playlist.mediaCount() == 0:
-                    self.openFile()
-                    self.player.play()
-                if self.playlist.mediaCount() != 0:
-                    self.player.setPlaylist(self.playlist)
-            elif self.player.mediaStatus() == QMediaPlayer.LoadedMedia:
-                self.player.play()
-            elif self.player.mediaStatus() == QMediaPlayer.BufferedMedia:
-                self.player.play()
-        elif self.player.state() == QMediaPlayer.PausedState:
+        if self.playlist.mediaCount() == 0:
+            self.openFile()
+        elif self.playlist.mediaCount() != 0:
             self.player.play()
+            print(self.playlist.mediaCount())
+            self.userAction = 1
 
     def pausehandler(self):
         self.userAction = 2
