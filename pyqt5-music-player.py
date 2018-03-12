@@ -27,10 +27,8 @@ class App(QMainWindow):
         folderAct = QAction('Open Folder', self)
 
         fileAct.setShortcut('Ctrl+O')
-        fileAct.setStatusTip('Open File')
 
         folderAct.setShortcut('Ctrl+D')
-        folderAct.setStatusTip('Open Folder (Will add all the files in the folder) ')
 
         filemenu.addAction(fileAct)
         filemenu.addAction(folderAct)
