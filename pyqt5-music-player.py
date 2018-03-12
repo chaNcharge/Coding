@@ -39,7 +39,6 @@ class App(QMainWindow):
         folderAct.triggered.connect(self.addFiles)
 
         self.addControls()
-        self.statusBar()
 
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -86,6 +85,9 @@ class App(QMainWindow):
         prevBtn.clicked.connect(self.prevSong)
         shuffleBtn.clicked.connect(self.shufflelist)
         nextBtn.clicked.connect(self.nextSong)
+
+        self.statusBar()
+        self.playlist.currentMediaChanged.connect(self.songChanged)
 
     def openFile(self):
         print("File button clicked!")
@@ -154,6 +156,7 @@ class App(QMainWindow):
         self.player.stop()
         self.playlist.clear()
         print("Playlist cleared!")
+        self.statusBar().showMessage("Stopped and cleared playlist")
         
     def increaseVolume(self):
         vol = self.player.volume()
@@ -180,6 +183,11 @@ class App(QMainWindow):
             self.openFile()
         elif self.playlist.mediaCount() != 0:
             self.player.playlist().next()
+    
+    def songChanged(self, media):
+        if not media.isNull():
+            url = media.canonicalUrl()
+            self.statusBar().showMessage(url.fileName())
 
 
 if __name__ == '__main__':
