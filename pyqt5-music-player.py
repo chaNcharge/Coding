@@ -73,7 +73,7 @@ class App(QMainWindow):
         controlArea.addLayout(controls)
         controlArea.addLayout(playlistCtrlLayout)
         wid.setLayout(controlArea)
-        # Connect each button to their appriate function
+        # Connect each signal to their appropriate function
         volumeDescBtn.clicked.connect(self.decreaseVolume)
         playBtn.clicked.connect(self.playhandler)
         pauseBtn.clicked.connect(self.pausehandler)
