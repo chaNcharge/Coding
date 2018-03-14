@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtCore import QUrl, QDirIterator
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog, QAction, QHBoxLayout, QVBoxLayout
+from PyQt5.QtCore import QUrl, QDirIterator, Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog, QAction, QHBoxLayout, QVBoxLayout, QSlider
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaPlayer, QMediaContent
 
 
@@ -46,39 +46,38 @@ class App(QMainWindow):
         wid = QWidget(self)
         self.setCentralWidget(wid)
         # Add song controls
+        volumeslider = QSlider(Qt.Horizontal, self)
+        volumeslider.setFocusPolicy(Qt.NoFocus)
+        volumeslider.valueChanged[int].connect(self.changeVolume)
+        volumeslider.setValue(100)
         playBtn = QPushButton('Play')  # play button
         pauseBtn = QPushButton('Pause')  # pause button
         stopBtn = QPushButton('Stop')  # stop button
-        volumeDescBtn = QPushButton('V (-)')  # Decrease Volume
-        volumeIncBtn = QPushButton('V (+)')  # Increase Volume
         # Add playlist controls
-        prevBtn = QPushButton('Prev Song')
+        prevBtn = QPushButton('Prev')
         shuffleBtn = QPushButton('Shuffle')
-        nextBtn = QPushButton('Next Song')
+        nextBtn = QPushButton('Next')
         # Add button layouts
         controlArea = QVBoxLayout()  # centralWidget
         controls = QHBoxLayout()
         playlistCtrlLayout = QHBoxLayout()
         # Add buttons to song controls layout
-        controls.addWidget(volumeDescBtn)
         controls.addWidget(playBtn)
         controls.addWidget(pauseBtn)
         controls.addWidget(stopBtn)
-        controls.addWidget(volumeIncBtn)
         # Add buttons to playlist controls layout
         playlistCtrlLayout.addWidget(prevBtn)
         playlistCtrlLayout.addWidget(shuffleBtn)
         playlistCtrlLayout.addWidget(nextBtn)
         # Add to vertical layout
+        controlArea.addWidget(volumeslider)
         controlArea.addLayout(controls)
         controlArea.addLayout(playlistCtrlLayout)
         wid.setLayout(controlArea)
         # Connect each button to their appriate function
-        volumeDescBtn.clicked.connect(self.decreaseVolume)
         playBtn.clicked.connect(self.playhandler)
         pauseBtn.clicked.connect(self.pausehandler)
         stopBtn.clicked.connect(self.stophandler)
-        volumeIncBtn.clicked.connect(self.increaseVolume)
 
         prevBtn.clicked.connect(self.prevSong)
         shuffleBtn.clicked.connect(self.shufflelist)
@@ -155,16 +154,9 @@ class App(QMainWindow):
         self.playlist.clear()
         print("Playlist cleared!")
         self.statusBar().showMessage("Stopped and cleared playlist")
-        
-    def increaseVolume(self):
-        vol = self.player.volume()
-        vol = min(vol+5,100)
-        self.player.setVolume(vol)
-        
-    def decreaseVolume(self):
-        vol = self.player.volume()
-        vol = max(vol-5,0)
-        self.player.setVolume(vol)
+
+    def changeVolume(self, value):
+        self.player.setVolume(value)
 
     def prevSong(self):
         if self.playlist.mediaCount() == 0:
