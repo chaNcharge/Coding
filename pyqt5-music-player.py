@@ -1,4 +1,5 @@
 import sys
+from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtCore import QUrl, QDirIterator, Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog, QAction, QHBoxLayout, QVBoxLayout, QSlider
 from PyQt5.QtMultimedia import QMediaPlaylist, QMediaPlayer, QMediaContent
@@ -182,5 +183,25 @@ class App(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
+
+    # Fusion dark palette from https://gist.github.com/QuantumCD/6245215. Modified by me and J.J.
+    palette = QPalette()
+    palette.setColor(QPalette.Window, QColor(53, 53, 53))
+    palette.setColor(QPalette.WindowText, Qt.white)
+    palette.setColor(QPalette.Base, QColor(25, 25, 25))
+    palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+    palette.setColor(QPalette.ToolTipBase, Qt.white)
+    palette.setColor(QPalette.ToolTipText, Qt.white)
+    palette.setColor(QPalette.Text, Qt.white)
+    palette.setColor(QPalette.Button, QColor(53, 53, 53))
+    palette.setColor(QPalette.ButtonText, Qt.white)
+    palette.setColor(QPalette.BrightText, Qt.red)
+    palette.setColor(QPalette.Link, QColor(96, 184, 255))
+    palette.setColor(QPalette.Highlight, QColor(96, 184, 255))
+    palette.setColor(QPalette.HighlightedText, Qt.black)
+    app.setPalette(palette)
+    app.setStyleSheet("QToolTip { color: #ffffff; background-color: #60b8ff; border: 1px solid white; }")
+    
     ex = App()
     sys.exit(app.exec_())
