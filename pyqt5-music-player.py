@@ -16,6 +16,7 @@ class App(QMainWindow):
         self.top = 300
         self.width = 300
         self.height = 150
+        self.color = 0  # 0- toggle to dark 1- toggle to light
         self.userAction = -1  # 0- stopped, 1- playing 2-paused
         self.initUI()
 
@@ -23,24 +24,29 @@ class App(QMainWindow):
         # Add file menu
         menubar = self.menuBar()
         filemenu = menubar.addMenu('File')
+        windowmenu = menubar.addMenu('Window')
 
         fileAct = QAction('Open File', self)
         folderAct = QAction('Open Folder', self)
+        themeAct = QAction('Toggle light/dark theme', self)
 
         fileAct.setShortcut('Ctrl+O')
-
         folderAct.setShortcut('Ctrl+D')
+        themeAct.setShortcut('Ctrl+T')
 
         filemenu.addAction(fileAct)
         filemenu.addAction(folderAct)
+        windowmenu.addAction(themeAct)
 
         fileAct.triggered.connect(self.openFile)
         folderAct.triggered.connect(self.addFiles)
+        themeAct.triggered.connect(self.toggleColors)
 
         self.addControls()
 
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+        self.toggleColors()
         self.show()
 
     def addControls(self):
@@ -180,28 +186,45 @@ class App(QMainWindow):
             url = media.canonicalUrl()
             self.statusBar().showMessage(url.fileName())
 
+    def toggleColors(self):
+        """ Fusion dark palette from https://gist.github.com/QuantumCD/6245215. Modified by me and J.J. """
+        app.setStyle("Fusion")
+        palette = QPalette()
+        if self.color == 0:
+            palette.setColor(QPalette.Window, QColor(53, 53, 53))
+            palette.setColor(QPalette.WindowText, Qt.white)
+            palette.setColor(QPalette.Base, QColor(25, 25, 25))
+            palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+            palette.setColor(QPalette.ToolTipBase, Qt.white)
+            palette.setColor(QPalette.ToolTipText, Qt.white)
+            palette.setColor(QPalette.Text, Qt.white)
+            palette.setColor(QPalette.Button, QColor(53, 53, 53))
+            palette.setColor(QPalette.ButtonText, Qt.white)
+            palette.setColor(QPalette.BrightText, Qt.red)
+            palette.setColor(QPalette.Link, QColor(235, 101, 54))
+            palette.setColor(QPalette.Highlight, QColor(235, 101, 54))
+            palette.setColor(QPalette.HighlightedText, Qt.black)
+            app.setPalette(palette)
+            self.color = 1
+        elif self.color == 1:
+            palette.setColor(QPalette.Window, Qt.white)
+            palette.setColor(QPalette.WindowText, Qt.black)
+            palette.setColor(QPalette.Base, QColor(240, 240, 240))
+            palette.setColor(QPalette.AlternateBase, Qt.white)
+            palette.setColor(QPalette.ToolTipBase, Qt.white)
+            palette.setColor(QPalette.ToolTipText, Qt.white)
+            palette.setColor(QPalette.Text, Qt.black)
+            palette.setColor(QPalette.Button, Qt.white)
+            palette.setColor(QPalette.ButtonText, Qt.black)
+            palette.setColor(QPalette.BrightText, Qt.red)
+            palette.setColor(QPalette.Link, QColor(66, 155, 248))
+            palette.setColor(QPalette.Highlight, QColor(66, 155, 248))
+            palette.setColor(QPalette.HighlightedText, Qt.black)
+            app.setPalette(palette)
+            self.color = 0
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    app.setStyle("Fusion")
-
-    # Fusion dark palette from https://gist.github.com/QuantumCD/6245215. Modified by me and J.J.
-    palette = QPalette()
-    palette.setColor(QPalette.Window, QColor(53, 53, 53))
-    palette.setColor(QPalette.WindowText, Qt.white)
-    palette.setColor(QPalette.Base, QColor(25, 25, 25))
-    palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
-    palette.setColor(QPalette.ToolTipBase, Qt.white)
-    palette.setColor(QPalette.ToolTipText, Qt.white)
-    palette.setColor(QPalette.Text, Qt.white)
-    palette.setColor(QPalette.Button, QColor(53, 53, 53))
-    palette.setColor(QPalette.ButtonText, Qt.white)
-    palette.setColor(QPalette.BrightText, Qt.red)
-    palette.setColor(QPalette.Link, QColor(96, 184, 255))
-    palette.setColor(QPalette.Highlight, QColor(96, 184, 255))
-    palette.setColor(QPalette.HighlightedText, Qt.black)
-    app.setPalette(palette)
-    app.setStyleSheet("QToolTip { color: #ffffff; background-color: #60b8ff; border: 1px solid white; }")
-    
     ex = App()
     sys.exit(app.exec_())
