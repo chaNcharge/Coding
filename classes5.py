@@ -26,5 +26,17 @@ class Customer(object):
         dollars."""
         self.balance += amount
         return self.balance
+        
     def bal(self):
+        return self.balance
+
+class Subscriber(Customer):
+    def __init__(self, name, balance=0.0):
+        super().__init__(name, balance)
+    
+    def loan(self, amount):
+        """Allow withdrawing more than the amount they have, at a cost."""
+        self.balance -= amount * 0.1
+        print("Taken out {0} (10%) for loan cost".format(amount * 0.1))
+        self.balance -= amount
         return self.balance
