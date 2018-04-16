@@ -77,8 +77,7 @@ def coinslot():
             elif slot1 and slot2 and slot3 == 7:
                 coins += 100
                 print("Jackpot!!!")
-    else:
-        print("\nOut of coins :(")
+    print("\nOut of coins :(")
 
 
 # Init
