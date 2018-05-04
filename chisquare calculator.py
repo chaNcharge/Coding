@@ -1,12 +1,20 @@
 from scipy.stats import chisquare
 
 o = []
+e = []
 
 while True:
-    tocalc = input("Enter a number. Enter a blank to finish. ")
+    tocalc = input("Enter one observed number. Enter a blank to finish. ")
     if tocalc == "":
         break
     else:
-        o.append(int(tocalc))
+        o.append(float(tocalc))
 
-print(chisquare(o))
+while True:
+    toexp = input("Enter one expected number. Enter a blank to finish. ")
+    if toexp == "":
+        break
+    else:
+        e.append(float(toexp))
+
+print(chisquare(o, f_exp=e))
